@@ -1,11 +1,16 @@
 import httpx
 
-from utils import create_table, clean_href, get_href
+from utils import clean_href, create_table, get_href
 
 link = "https://rsv.ru/"
 params = {"registration": "true"}
 
-projects_href = get_href(clean_href(httpx.get(link + "competitions/", params=params).content), link)
+request = httpx.get(link + "competitions/", params=params)
+if request.status_code == 200:
+    request = request.content
+else:
+    request.raise_for_status()
 
-result = create_table(projects_href)
-print(*result, sep="\n\n")
+projects = create_table(get_href(clean_href(request), link))
+
+print(*projects, sep="\n\n")

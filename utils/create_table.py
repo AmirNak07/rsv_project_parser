@@ -2,7 +2,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 
-def create_table(projects_href):
+def create_table(projects_href: list) -> list:
     result = []
 
     for project in projects_href:
@@ -28,6 +28,13 @@ def create_table(projects_href):
                 scope = list(map(lambda x: x.text.replace("\xa0", ""), block.find_all("a", class_="block-narrow__link")))
             if block_title == "Для кого":
                 audience = list(map(lambda x: x.text.replace("\xa0", ""), block.find_all("a", class_="block-narrow__link")))
+
+        scope = ", ".join(map(lambda x: x.lower(), scope))
+        scope = scope[0].upper() + scope[1:]
+
+        audience = ", ".join(map(lambda x: x.lower(), audience))
+        audience = audience[0].upper() + audience[1:]
+
         temp.append(scope)
         temp.append(audience)
         result.append(temp)
