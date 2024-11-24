@@ -30,6 +30,7 @@ def main():
         request.raise_for_status()
 
     projects = create_table(get_href(clean_href(request), link))
+    projects = [["Название", "Описание", "Cсылка", "Для кого", "Возможности"]] + projects
     write_to_table(client, id_table, name_worksheet, projects)
 
 
