@@ -1,5 +1,6 @@
 import httpx
 from bs4 import BeautifulSoup
+from loguru import logger
 
 
 def create_table(projects_href: list) -> list:
@@ -39,4 +40,5 @@ def create_table(projects_href: list) -> list:
         temp.append(scope)
         result.append(temp)
 
+    logger.debug(f"Создание итоговой таблицы {result}")
     return result

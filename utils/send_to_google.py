@@ -1,4 +1,5 @@
 from gspread.client import Client
+from loguru import logger
 
 
 def write_to_table(client: Client, table_id: str, worklist: str, data: str) -> None:
@@ -6,3 +7,4 @@ def write_to_table(client: Client, table_id: str, worklist: str, data: str) -> N
     worksheet = sheet.worksheet(worklist)
     worksheet.clear()
     worksheet.append_rows(values=data)
+    logger.debug("Отправка данных в таблицу")

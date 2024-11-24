@@ -1,12 +1,16 @@
 import gspread
 import httpx
+from loguru import logger
 from oauth2client.service_account import ServiceAccountCredentials
 
 from utils import clean_href, create_table, get_href, write_to_table
-from config import ID_TABLE, NAME_SPREADSHEET
+from config import ID_TABLE, NAME_SPREADSHEET, LOGS_CONFIG
 
 
 def main():
+    logger.remove()
+    logger.configure(**LOGS_CONFIG)
+
     id_table = ID_TABLE
     name_worksheet = NAME_SPREADSHEET
 
@@ -23,6 +27,8 @@ def main():
     link = "https://rsv.ru/"
     params = {"registration": "true"}
 
+    logger.info("Начало парсинга")
+
     request = httpx.get(link + "competitions/", params=params)
     if request.status_code == 200:
         request = request.content
@@ -32,6 +38,7 @@ def main():
     projects = create_table(get_href(clean_href(request), link))
     projects = [["Название", "Описание", "Cсылка", "Для кого", "Возможности"]] + projects
     write_to_table(client, id_table, name_worksheet, projects)
+    logger.info("Парсинг прошёл успешно")
 
 
 if __name__ == "__main__":

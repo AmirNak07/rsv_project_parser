@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from loguru import logger
 
 
 def clean_href(html: str) -> list:
@@ -7,4 +8,5 @@ def clean_href(html: str) -> list:
     projects_a = projects.findChildren("a", recursive=False)
     projects_href = [project["href"] for project in projects_a]
     projects_href = [project for project in projects_href if not project.startswith("https://vk.com/")]
+    logger.debug("Поиск всех карточек с проектами")
     return projects_href
