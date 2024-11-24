@@ -1,12 +1,16 @@
+import time
+
 import gspread
 import httpx
+import schedule
 from loguru import logger
 from oauth2client.service_account import ServiceAccountCredentials
 
+from config import ID_TABLE, LOGS_CONFIG, NAME_SPREADSHEET
 from utils import clean_href, create_table, get_href, write_to_table
-from config import ID_TABLE, NAME_SPREADSHEET, LOGS_CONFIG
 
 
+@logger.catch
 def main():
     logger.remove()
     logger.configure(**LOGS_CONFIG)
@@ -42,4 +46,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    schedule.every(3).hours.do(main)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+    # main()

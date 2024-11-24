@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from loguru import logger
 
 
+@logger.catch
 def create_table(projects_href: list) -> list:
     result = []
 
