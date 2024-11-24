@@ -35,8 +35,8 @@ def create_table(projects_href: list) -> list:
         audience = ", ".join(map(lambda x: x.lower(), audience))
         audience = audience[0].upper() + audience[1:]
 
-        temp.append(scope)
         temp.append(audience)
+        temp.append(scope)
         result.append(temp)
 
     return result
