@@ -10,10 +10,12 @@ from config import ID_TABLE, LOGS_CONFIG, NAME_SPREADSHEET
 from utils import clean_href, create_table, get_href, write_to_table
 
 
+logger.remove()
+logger.configure(**LOGS_CONFIG)
+
+
 @logger.catch
 def main():
-    logger.remove()
-    logger.configure(**LOGS_CONFIG)
 
     id_table = ID_TABLE
     name_worksheet = NAME_SPREADSHEET
@@ -40,13 +42,15 @@ def main():
         request.raise_for_status()
 
     projects = create_table(get_href(clean_href(request), link))
-    projects = [["Название", "Описание", "Cсылка", "Для кого", "Возможности"]] + projects
-    write_to_table(client, id_table, name_worksheet, projects)
+    table = [["Название", "Описание", "Cсылка", "Для кого", "Возможности"]]
+    if projects is not None:
+        table = [["Название", "Описание", "Cсылка", "Для кого", "Возможности"]] + projects
+    write_to_table(client, id_table, name_worksheet, table)
     logger.info("Парсинг прошёл успешно")
 
 
 if __name__ == "__main__":
-    schedule.every(3).hours.do(main)
+    schedule.every(1).minutes.do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
