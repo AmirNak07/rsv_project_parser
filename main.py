@@ -50,7 +50,7 @@ def main():
 
 
 if __name__ == "__main__":
-    schedule.every(1).minutes.do(main)
+    schedule.every(3).hours.do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
