@@ -9,7 +9,11 @@ def create_table(projects_href: list) -> list:
 
     for project in projects_href:
         temp = []
-        html = httpx.get(project[0], params=project[1]).content
+        try:
+            html = httpx.get(project[0], params=project[1], timeout=10).content
+        except httpx.ReadTimeout:
+            logger.error(f"Проект {project[0]} не отвечает")
+            continue
         soup = BeautifulSoup(html, "html.parser")
         # Название
         temp.append(soup.find("h3", class_="project-detail-block__title").text)
