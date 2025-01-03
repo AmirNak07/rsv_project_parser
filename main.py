@@ -35,7 +35,7 @@ def main():
 
     logger.info("Начало парсинга")
 
-    request = httpx.get(link + "competitions/", params=params)
+    request = httpx.get(link + "competitions/", params=params, timeout=10)
     if request.status_code == 200:
         request = request.content
     else:
